@@ -1,36 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Blog</title>
-    <link rel="stylesheet" href="/styles/bootstrap.min.css">
-    <script src="/scripts/jquery.min.js"></script>
-    <script src="/scripts/popper.min.js"></script>
-    <script src="/scripts/bootstrap.min.js"></script>
-    <script src="/scripts/sweetalert2.min.js"></script>
-</head>
+<%- include('./partials/header.ejs') %>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">My blog</a>
-        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/blog">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/signIn">Sign in</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <%- include('./partials/navbar.ejs') %>
 
     <div class="container-fluid">
         <h1>Welcome to my blog</h1>
@@ -66,7 +39,7 @@
             </tbody>
         </table>
 
-        <h5 class="text-center">Copyright &copy; 2021 ITschool</h5>
+        <%- include('./partials/footer.ejs') %>
     </div>
 </body>
 </html>
