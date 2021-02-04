@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(helmet());      //for header protection
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser(process.env.COOKIE_KEY));
 
 // *********** Functions **************
 // middleware to verify user
@@ -71,6 +73,16 @@ app.post('/login', (req, res) => {
     const {username, password} = req.body;
     if(username == "admin" && password == "1234") {
         //create JWT
+        const payload = {userID: 1, username: 'admin'};
+        const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: '1d'});
+
+        // save token to client's cookie
+        const cookieOption = {
+            maxAge: 24 * 60 * 60 * 1000,    //ms
+            httpOnly: true,
+            signed: true
+        };
+        res.cookie("mytoken", token, cookieOption);
 
         res.send("Login OK");
     }
