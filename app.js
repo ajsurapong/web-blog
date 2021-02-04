@@ -1,7 +1,9 @@
 // ************* Importing packages ********
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -14,6 +16,21 @@ app.use(helmet());      //for header protection
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// *********** Functions **************
+async function checkUser(token) {
+    const result = await jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+        if(err) {
+            console.log(err);
+            return false;
+        } else {
+            // OK, decoding is done
+            // console.log(decoded);
+            return decoded;
+        }
+    });
+    return result;
+}
 
 // *********** Routes **************
 // ======= Page routes ==========
@@ -30,13 +47,27 @@ app.get('/signIn', (req, res) => {
 
 // --- blog ---
 app.get('/blog', (req, res) => {
-    const years = [2021, 2020, 2019];
-    const posts = [
-        {title: "aaa", detail: "AAA", year: 2021}, 
-        {title: "bbb", detail: "BBB", year: 2020},
-        {title: "ccc", detail: "CCC", year: 2019}
-    ];
-    res.render('blog', {year: years, post: posts});
+    //FIXME: check JWT
+    const token = req.headers['x-access-token'];
+    checkUser(token).then((result) => {
+        // res.send(result);
+        if(result !== false) {
+            res.send(result);
+        }
+        else {
+            res.send("/");
+        }
+    });   
+    // console.log(result); 
+    // res.send(result);
+
+    // const years = [2021, 2020, 2019];
+    // const posts = [
+    //     {title: "aaa", detail: "AAA", year: 2021}, 
+    //     {title: "bbb", detail: "BBB", year: 2020},
+    //     {title: "ccc", detail: "CCC", year: 2019}
+    // ];
+    // res.render('blog', {year: years, post: posts});
 });
 
 // ======= Other routes ==========
@@ -44,11 +75,36 @@ app.get('/blog', (req, res) => {
 app.post('/login', (req, res) => {
     const {username, password} = req.body;
     if(username == "admin" && password == "1234") {
+        //create JWT
+
         res.send("Login OK");
     }
     else {
         res.status(400).send("Login failed");
     }
+});
+
+// --- create jwt ---
+app.get('/jwt', (req, res) => {
+    // res.send(process.env.JWT_KEY);
+    const payload = {userID: 1, username: 'admin'};
+    const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: '1d'});
+    res.send(token);
+    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTI0MDY4OTgsImV4cCI6MTYxMjQ5MzI5OH0.hRxaU5qu_v4oPgUBJd0aCaWoNm0vMjXZmP0FKvVtjKc
+});
+
+// --- check jwt ---
+app.get('/verify', (req, res) => {
+    const token = req.headers['x-access-token'];
+    jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+        if(err) {
+            console.log(err);
+            res.status(400).send('Invalid token');
+        } else {
+            // OK, decoding is done
+            res.send(decoded);
+        }
+    });
 });
 
 // 404, must be the last service
@@ -58,7 +114,7 @@ app.use((req, res) => {
 });
 
 // ************ Starting server ***********
-const PORT = 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log("Server is staring at port " + PORT);
 });
