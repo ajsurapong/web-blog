@@ -18,18 +18,26 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // *********** Functions **************
-async function checkUser(token) {
-    const result = await jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
-        if(err) {
-            console.log(err);
-            return false;
-        } else {
-            // OK, decoding is done
-            // console.log(decoded);
-            return decoded;
-        }
-    });
-    return result;
+// middleware to verify user
+function checkUser(req, res, next) {
+    const token = req.headers['x-access-token'];
+    if(token) {
+        jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+            if (err) {
+                //token is wrong
+                console.log(err);
+                res.status(400).send('Invalid token');
+            } else {
+                // OK, decoding is done
+                req.decoded = decoded;
+                next();
+            }
+        });
+    }
+    else {
+        //no token, return to homepage
+        res.redirect('/');
+    }    
 }
 
 // *********** Routes **************
@@ -46,28 +54,15 @@ app.get('/signIn', (req, res) => {
 });
 
 // --- blog ---
-app.get('/blog', (req, res) => {
-    //FIXME: check JWT
-    const token = req.headers['x-access-token'];
-    checkUser(token).then((result) => {
-        // res.send(result);
-        if(result !== false) {
-            res.send(result);
-        }
-        else {
-            res.send("/");
-        }
-    });   
-    // console.log(result); 
-    // res.send(result);
-
-    // const years = [2021, 2020, 2019];
-    // const posts = [
-    //     {title: "aaa", detail: "AAA", year: 2021}, 
-    //     {title: "bbb", detail: "BBB", year: 2020},
-    //     {title: "ccc", detail: "CCC", year: 2019}
-    // ];
-    // res.render('blog', {year: years, post: posts});
+app.get('/blog', checkUser, (req, res) => {   
+    const years = [2021, 2020, 2019];
+    const posts = [
+        {title: "aaa", detail: "AAA", year: 2021}, 
+        {title: "bbb", detail: "BBB", year: 2020},
+        {title: "ccc", detail: "CCC", year: 2019}
+    ];
+    // res.json(posts);
+    res.render('blog', {year: years, post: posts});
 });
 
 // ======= Other routes ==========
