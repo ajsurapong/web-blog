@@ -61,15 +61,49 @@ app.get('/signIn', (req, res) => {
 
 // --- blog ---
 app.get('/blog', checkUser, (req, res) => {
-    const years = [2021, 2020, 2019];
-    const posts = [
-        { title: "aaa", detail: "AAA", year: 2021 },
-        { title: "bbb", detail: "BBB", year: 2020 },
-        { title: "ccc", detail: "CCC", year: 2019 }
-    ];
-    // res.json(posts);
-    // console.log(req.decoded);
-    res.render('blog', { users: req.decoded, year: years, post: posts });
+    // get all years
+    let sql = 'SELECT DISTINCT year FROM blog WHERE userID = ? ORDER BY year DESC';
+    con.query(sql, [req.decoded.userID], (err, years) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        // get blog details of a user
+        sql = 'SELECT blogID, title, detail, year FROM blog WHERE userID = ? ORDER BY year DESC';
+        con.query(sql, [req.decoded.userID], (err, blogs) => {
+            if(err) {
+                console.log(err);
+                return res.status(500).send('Database error');
+            }
+            // res.json({ users: req.decoded, year: years, post: blogs });
+            res.render('blog', { users: req.decoded, year: years, post: blogs });
+        });
+    }); 
+});
+
+
+// --- blog for selected year ---
+app.get('/blog/:year', checkUser, (req, res) => {
+    const year = req.params.year;
+
+    // get all years
+    let sql = 'SELECT DISTINCT year FROM blog WHERE userID = ? ORDER BY year DESC';
+    con.query(sql, [req.decoded.userID], (err, years) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        // get blog details of a user
+        sql = 'SELECT blogID, title, detail, year FROM blog WHERE userID = ? AND year = ? ORDER BY year DESC';
+        con.query(sql, [req.decoded.userID, year], (err, blogs) => {
+            if(err) {
+                console.log(err);
+                return res.status(500).send('Database error');
+            }
+            // res.json({ users: req.decoded, year: years, post: blogs });
+            res.render('blog', { users: req.decoded, year: years, post: blogs });
+        });
+    }); 
 });
 
 // ======= Other routes ==========

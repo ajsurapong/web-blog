@@ -13,7 +13,7 @@
                 <select class="form-control" id="selectYear" style="width: 100px;">
                     <option value="all">All year</option>
                     <% year.forEach(element => { %>
-                    <option value="<%= element %>"><%= element %> </option>
+                    <option value="<%= element.year %>"><%= element.year %> </option>
                     <% }) %>
                 </select>
             </div>
@@ -50,5 +50,7 @@
 
         <%- include('./partials/footer.ejs') %>
     </div>
+
+    <script src="/scripts/js/blog.js"></script>
 </body>
 </html>
