@@ -2,10 +2,13 @@ POST http://localhost:3000/login
 content-type: application/json
 
 {
-    "username": "admin",
-    "password": "1234"
+    "username": "tom",
+    "password": "2222"
 }
 
 ### jwt verify
 GET http://localhost:3000/blog
 x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTI0MDY4OTgsImV4cCI6MTYxMjQ5MzI5OH0.hRxaU5qu_v4oPgUBJd0aCaWoNm0vMjXZmP0FKvVtjKc
+
+### hash password
+GET http://localhost:3000/password/2222

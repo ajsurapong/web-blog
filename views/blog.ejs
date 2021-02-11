@@ -3,10 +3,10 @@
 <%- include('./partials/header.ejs') %>
 
 <body>
-    <%- include('./partials/navbar.ejs') %>
+    <%- include('./partials/navbar-user.ejs') %>
 
     <div class="container-fluid">
-        <h1>Welcome to my blog</h1>
+        <h1>Welcome <%= users.username %> </h1>
 
         <div class="row mb-2">
             <div class="col-10">

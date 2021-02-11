@@ -10,7 +10,7 @@ $(document).ready(function () {
             url: "/login",
             data: {username: username, password: password},
             success: function (response) {
-                alert(response);
+                window.location.replace(response);
             },
             error: function(xhr) {
                 alert(xhr.responseText);
