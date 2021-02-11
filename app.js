@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const compression = require('compression');
 const helmet = require('helmet');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -13,6 +14,7 @@ app.set('view engine', 'ejs');
 // app.set('views', path.join(__dirname, 'views'));
 
 // ************ Middleware *********
+app.use(compression());
 app.use(helmet());      //for header protection
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -22,7 +24,7 @@ app.use(cookieParser(process.env.COOKIE_KEY));
 // *********** Functions **************
 // middleware to verify user
 function checkUser(req, res, next) {
-    const token = req.headers['x-access-token'];
+    const token = req.signedCookies['mytoken'] || req.headers['x-access-token'];
     if(token) {
         jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
             if (err) {
@@ -89,6 +91,13 @@ app.post('/login', (req, res) => {
     else {
         res.status(400).send("Login failed");
     }
+});
+
+// --- log out ---
+app.get('/logout', (req, res) => {
+    // remove token cookie
+    res.clearCookie('mytoken');
+    res.redirect('/');
 });
 
 // --- create jwt ---
