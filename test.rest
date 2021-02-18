@@ -30,3 +30,14 @@ content-type: application/json
     "title": "dummy",
     "detail": "dummy"
 }
+
+### update a post
+PUT http://localhost:3000/blog/edit
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTM2MTIzMjgsImV4cCI6MTYxMzY5ODcyOH0.WraBygnQbPJnW-Bd-g4aQ2e97x0v735ATLY3wzRTBvU
+content-type: application/json
+
+{
+    "title": "dummy3",
+    "detail": "dummy3",
+    "blogID": 9
+}

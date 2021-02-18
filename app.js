@@ -224,6 +224,25 @@ app.post('/blog/new', checkUser, (req, res) => {
     });
 });
 
+//  --- edit a post ---
+app.put('/blog/edit', checkUser, (req, res) => {
+    const title = req.body.title;
+    const detail = req.body.detail;
+    const blogID = req.body.blogID;
+    
+    const sql = 'UPDATE blog SET title = ?, detail = ? WHERE blogID = ?';
+    con.query(sql, [title, detail, blogID], (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        if(result.affectedRows != 1) {
+            return res.status(500).send('Insert failed');
+        }
+        res.send('/blog');
+    });
+});
+
 // 404, must be the last service
 app.use((req, res) => {
     // res.status(404).send("Oops, page is not found!");
