@@ -205,6 +205,25 @@ app.delete('/blog/:id', checkUser, (req, res) => {
     });
 });
 
+//  --- add new post ---
+app.post('/blog/new', checkUser, (req, res) => {
+    const title = req.body.title;
+    const detail = req.body.detail;
+    const year = new Date().getFullYear();
+    
+    const sql = 'INSERT INTO blog(userID, title, detail, year) VALUES(?, ?, ?, ?)';
+    con.query(sql, [req.decoded.userID, title, detail, year], (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        if(result.affectedRows != 1) {
+            return res.status(500).send('Insert failed');
+        }
+        res.send('/blog');
+    });
+});
+
 // 404, must be the last service
 app.use((req, res) => {
     // res.status(404).send("Oops, page is not found!");

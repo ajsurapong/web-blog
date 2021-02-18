@@ -41,4 +41,33 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("#btnAdd").click(function () { 
+        // show modal
+        $("#modalAdd").modal("toggle");
+    });
+
+    $("#btnModalSave").click(function () { 
+        // close modal
+        $("#modalAdd").modal("toggle");
+        const data = {
+            title: $("#txtTitle").val(),
+            detail: $("#txtDetail").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/blog/new",
+            data: data,
+            success: function (response) {
+                window.location.replace(response);
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    icon: "error",
+                    title: xhr.responseText,
+                });
+            }
+        });
+    });
 });
