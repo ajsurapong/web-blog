@@ -42,22 +42,46 @@ $(document).ready(function () {
         });
     });
 
+    // global variables to separate between 'add' and 'edit'    
+    var mode = "";
+    var blogID = 0;
+    // Add button
     $("#btnAdd").click(function () { 
+        mode = "add";
+        // clear data
+        $("#txtTitle").val("");
+        $("#txtDetail").val("");
         // show modal
         $("#modalAdd").modal("toggle");
     });
 
+    // Save button for both 'add' and 'edit'
     $("#btnModalSave").click(function () { 
         // close modal
         $("#modalAdd").modal("toggle");
-        const data = {
+
+        // add       
+        let data = {
             title: $("#txtTitle").val(),
             detail: $("#txtDetail").val()
         };
+        let method = "POST";
+        let url = "/blog/new";
+        
+        // edit
+        if(mode == "edit") {
+            data = {
+                title: $("#txtTitle").val(),
+                detail: $("#txtDetail").val(),
+                blogID: blogID
+            };
+            method = "PUT";
+            url = "/blog/edit";
+        }       
 
         $.ajax({
-            type: "POST",
-            url: "/blog/new",
+            type: method,
+            url: url,
             data: data,
             success: function (response) {
                 window.location.replace(response);
@@ -69,5 +93,20 @@ $(document).ready(function () {
                 });
             }
         });
+    });
+
+    // Edit button
+    $(".btnEdit").click(function () { 
+        mode = "edit";
+        // change the modal title
+        $("#modalTitle").text("Edit a post");
+        // show modal
+        $("#modalAdd").modal("toggle");
+        // get selected post data
+        const postData = JSON.parse($(this).attr("blogData"));
+        // console.log(postData);
+        $("#txtTitle").val(postData.title);
+        $("#txtDetail").val(postData.detail);
+        blogID = postData.blogID;        
     });
 });

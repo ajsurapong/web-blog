@@ -41,7 +41,7 @@
                         <td><%= post[index].year %> </td>
                         <td>
                             <button type="button" class="btn btn-danger btnDelete" blogID="<%= post[index].blogID %>">Delete</button>
-                            <button type="button" class="btn btn-warning btnEdit">Edit</button>
+                            <button type="button" class="btn btn-warning btnEdit" blogData="<%= JSON.stringify(post[index]) %>">Edit</button>
                         </td>
                     </tr>
                 <% } %>
@@ -53,7 +53,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add new post</h5>
+                        <h5 class="modal-title" id="modalTitle">Add new post</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
