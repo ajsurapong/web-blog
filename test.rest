@@ -6,9 +6,17 @@ content-type: application/json
     "password": "2222"
 }
 
+### create jwt
+GET http://localhost:3000/jwt
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTM2MTIzMjgsImV4cCI6MTYxMzY5ODcyOH0.WraBygnQbPJnW-Bd-g4aQ2e97x0v735ATLY3wzRTBvU
+
 ### jwt verify
 GET http://localhost:3000/blog
-x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTI0MDY4OTgsImV4cCI6MTYxMjQ5MzI5OH0.hRxaU5qu_v4oPgUBJd0aCaWoNm0vMjXZmP0FKvVtjKc
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTM2MTIzMjgsImV4cCI6MTYxMzY5ODcyOH0.WraBygnQbPJnW-Bd-g4aQ2e97x0v735ATLY3wzRTBvU
 
 ### hash password
 GET http://localhost:3000/password/2222
+
+### delete post
+DELETE http://localhost:3000/blog/5
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTM2MTIzMjgsImV4cCI6MTYxMzY5ODcyOH0.WraBygnQbPJnW-Bd-g4aQ2e97x0v735ATLY3wzRTBvU

@@ -59,53 +59,6 @@ app.get('/signIn', (req, res) => {
     res.render('login');
 });
 
-// --- blog ---
-app.get('/blog', checkUser, (req, res) => {
-    // get all years
-    let sql = 'SELECT DISTINCT year FROM blog WHERE userID = ? ORDER BY year DESC';
-    con.query(sql, [req.decoded.userID], (err, years) => {
-        if(err) {
-            console.log(err);
-            return res.status(500).send('Database error');
-        }
-        // get blog details of a user
-        sql = 'SELECT blogID, title, detail, year FROM blog WHERE userID = ? ORDER BY year DESC';
-        con.query(sql, [req.decoded.userID], (err, blogs) => {
-            if(err) {
-                console.log(err);
-                return res.status(500).send('Database error');
-            }
-            // res.json({ users: req.decoded, year: years, post: blogs });
-            res.render('blog', { users: req.decoded, year: years, post: blogs });
-        });
-    }); 
-});
-
-
-// --- blog for selected year ---
-app.get('/blog/:year', checkUser, (req, res) => {
-    const year = req.params.year;
-
-    // get all years
-    let sql = 'SELECT DISTINCT year FROM blog WHERE userID = ? ORDER BY year DESC';
-    con.query(sql, [req.decoded.userID], (err, years) => {
-        if(err) {
-            console.log(err);
-            return res.status(500).send('Database error');
-        }
-        // get blog details of a user
-        sql = 'SELECT blogID, title, detail, year FROM blog WHERE userID = ? AND year = ? ORDER BY year DESC';
-        con.query(sql, [req.decoded.userID, year], (err, blogs) => {
-            if(err) {
-                console.log(err);
-                return res.status(500).send('Database error');
-            }
-            // res.json({ users: req.decoded, year: years, post: blogs });
-            res.render('blog', { users: req.decoded, year: years, post: blogs });
-        });
-    }); 
-});
-
 // ======= Other routes ==========
 // --- generate hash password ---
 app.get('/password/:pass', (req, res) => {
@@ -174,7 +127,6 @@ app.get('/jwt', (req, res) => {
     const payload = { userID: 1, username: 'admin' };
     const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1d' });
     res.send(token);
-    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MTI0MDY4OTgsImV4cCI6MTYxMjQ5MzI5OH0.hRxaU5qu_v4oPgUBJd0aCaWoNm0vMjXZmP0FKvVtjKc
 });
 
 // --- check jwt ---
@@ -188,6 +140,68 @@ app.get('/verify', (req, res) => {
             // OK, decoding is done
             res.send(decoded);
         }
+    });
+});
+
+// --- blog ---
+app.get('/blog', checkUser, (req, res) => {
+    // get all years
+    let sql = 'SELECT DISTINCT year FROM blog WHERE userID = ? ORDER BY year DESC';
+    con.query(sql, [req.decoded.userID], (err, years) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        // get blog details of a user
+        sql = 'SELECT blogID, title, detail, year FROM blog WHERE userID = ? ORDER BY year DESC';
+        con.query(sql, [req.decoded.userID], (err, blogs) => {
+            if(err) {
+                console.log(err);
+                return res.status(500).send('Database error');
+            }
+            // res.json({ users: req.decoded, year: years, post: blogs });
+            res.render('blog', { users: req.decoded, year: years, post: blogs });
+        });
+    }); 
+});
+
+// --- blog for selected year ---
+app.get('/blog/:year', checkUser, (req, res) => {
+    const year = req.params.year;
+
+    // get all years
+    let sql = 'SELECT DISTINCT year FROM blog WHERE userID = ? ORDER BY year DESC';
+    con.query(sql, [req.decoded.userID], (err, years) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        // get blog details of a user
+        sql = 'SELECT blogID, title, detail, year FROM blog WHERE userID = ? AND year = ? ORDER BY year DESC';
+        con.query(sql, [req.decoded.userID, year], (err, blogs) => {
+            if(err) {
+                console.log(err);
+                return res.status(500).send('Database error');
+            }
+            // res.json({ users: req.decoded, year: years, post: blogs });
+            res.render('blog', { users: req.decoded, year: years, post: blogs });
+        });
+    }); 
+});
+
+// --- delete selected blog of a user ---
+app.delete('/blog/:id', checkUser, (req, res) => {
+    const blogID = req.params.id;
+    const sql = 'DELETE FROM blog WHERE blogID = ?';
+    con.query(sql, [blogID], (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Database error');
+        }
+        if(result.affectedRows != 1) {
+            return res.status(500).send('Delete failed');
+        }
+        res.send('/blog');
     });
 });
 
