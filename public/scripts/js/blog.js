@@ -48,6 +48,8 @@ $(document).ready(function () {
     // Add button
     $("#btnAdd").click(function () { 
         mode = "add";
+        // change the modal title
+        $("#modalTitle").text("Add new post");
         // clear data
         $("#txtTitle").val("");
         $("#txtDetail").val("");
