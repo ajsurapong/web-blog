@@ -13,7 +13,11 @@
                 <select class="form-control" id="selectYear" style="width: 100px;">
                     <option value="all">All year</option>
                     <% year.forEach(element => { %>
-                    <option value="<%= element.year %>"><%= element.year %> </option>
+                        <% if (locals.currentYear && element.year == currentYear) { %>
+                            <option value="<%= element.year %>" selected> <%= element.year %> </option>
+                        <% } else { %>
+                            <option value="<%= element.year %>"> <%= element.year %> </option>
+                        <% } %>
                     <% }) %>
                 </select>
             </div>

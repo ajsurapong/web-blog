@@ -186,7 +186,7 @@ app.get('/blog/:year', checkUser, (req, res) => {
                 return res.status(500).send('Database error');
             }
             // res.json({ users: req.decoded, year: years, post: blogs });
-            res.render('blog', { users: req.decoded, year: years, post: blogs });
+            res.render('blog', { users: req.decoded, year: years, post: blogs, currentYear: year });
         });
     }); 
 });
