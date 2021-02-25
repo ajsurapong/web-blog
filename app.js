@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const pageRoute = require('./routes/pageRoute');
 const otherRoute = require('./routes/otherRoute');
 const blogRoute = require('./routes/blogRoute');
+const mobileRoute = require('./routes/mobileRoute');
 
 const app = express();
 
@@ -33,6 +34,9 @@ app.use(otherRoute);
 
 // ======= Blog routes ==========
 app.use(blogRoute);
+
+// ======= Mobile routes ==========
+app.use(mobileRoute);
 
 // 404, must be the last service
 app.use((req, res) => {

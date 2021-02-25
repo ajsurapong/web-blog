@@ -41,3 +41,12 @@ content-type: application/json
     "detail": "dummy3",
     "blogID": 9
 }
+
+### Mobile login
+POST http://localhost:3000/mobile/login
+content-type: application/json
+
+{
+    "username": "tom",
+    "password": "2222"
+}
