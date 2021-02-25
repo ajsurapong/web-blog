@@ -1,3 +1,6 @@
+<% const menu = [{title: "Home", url: "/"}, {title: "Blog", url: "/blog"}, {title: "Sign out", url: "/logout"}]; %>
+<% const currentMenu = locals.post ? "Blog" : "Home" %> 
+
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <a class="navbar-brand" href="/">My lovely blog</a>
     <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId">
@@ -5,15 +8,15 @@
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/blog">Blog</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Sign out</a>
-            </li>
+            <% menu.forEach(element => { %>
+                <% if (element.title == currentMenu) { %>
+                    <li class="nav-item active">
+                <% } else { %>
+                    <li class="nav-item">             
+                <% } %>
+                        <a class="nav-link" href="<%= element.url %> "><%= element.title %> </a>
+                    </li>
+            <% }) %>
         </ul>
     </div>
 </nav>

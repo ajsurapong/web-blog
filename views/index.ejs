@@ -3,8 +3,12 @@
 <%- include('./partials/header.ejs') %>
 
 <body>
-    <%- include('./partials/navbar.ejs') %>
-
+    <% if (locals.navbar) { %>
+        <%- include('./partials/navbar.ejs') %>
+    <% } else { %>
+        <%- include('./partials/navbar-user.ejs') %>
+    <% } %>
+    
     <div class="container-fluid">
         <h1>Welcome to my blog</h1>
 

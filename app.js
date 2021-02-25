@@ -11,6 +11,8 @@ const con = require('./config/db');
 
 const app = express();
 
+const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis cras sed felis eget velit. Egestas congue quisque egestas diam in arcu cursus. Nulla aliquet porttitor lacus luctus accumsan. Urna nec tincidunt praesent semper feugiat nibh sed. Volutpat maecenas volutpat blandit aliquam etiam. Eget nunc scelerisque viverra mauris in. Ultrices tincidunt arcu non sodales neque sodales ut etiam. Ut pharetra sit amet aliquam id diam maecenas. Egestas quis ipsum suspendisse ultrices gravida. Enim nec dui nunc mattis enim ut tellus elementum sagittis.";
+
 // *********** View engine *********
 app.set('view engine', 'ejs');
 // app.set('views', path.join(__dirname, 'views'));
@@ -42,15 +44,15 @@ function checkUser(req, res, next) {
     }
     else {
         //no token, return to homepage
-        res.redirect('/');
+        // res.redirect('/home');
+        res.render('index', { content: content, navbar: true });
     }
 }
 
 // *********** Routes **************
 // ======= Page routes ==========
 // --- root ---
-app.get('/', (req, res) => {
-    const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis cras sed felis eget velit. Egestas congue quisque egestas diam in arcu cursus. Nulla aliquet porttitor lacus luctus accumsan. Urna nec tincidunt praesent semper feugiat nibh sed. Volutpat maecenas volutpat blandit aliquam etiam. Eget nunc scelerisque viverra mauris in. Ultrices tincidunt arcu non sodales neque sodales ut etiam. Ut pharetra sit amet aliquam id diam maecenas. Egestas quis ipsum suspendisse ultrices gravida. Enim nec dui nunc mattis enim ut tellus elementum sagittis.";
+app.get('/', checkUser, (req, res) => {    
     res.render('index', { content: content });
 });
 
