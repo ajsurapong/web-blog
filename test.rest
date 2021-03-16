@@ -85,3 +85,7 @@ content-type: application/json
     "detail": "dummy2",
     "blogID": 12
 }
+
+### get mobile blog data for a selected year
+GET http://localhost:3000/mobile/verify
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjIsInVzZXJuYW1lIjoidG9tIiwiaWF0IjoxNjE1ODk2NjI1LCJleHAiOjE2MTU5ODMwMjV9.8SefM9g1GYaVbY6qw_LUUc5Tle_TG_jL4jU-PAc7jk8

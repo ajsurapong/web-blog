@@ -5,6 +5,21 @@ const con = require('../config/db');
 const jwt = require('jsonwebtoken');
 const checkUser = require('./checkUserMobile');
 
+// --- validate token ---
+// --- check jwt ---
+router.get('/mobile/verify', (req, res) => {
+    const token = req.headers['authorization'];
+    jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            res.status(400).send('Invalid token');
+        } else {
+            // OK, decoding is done
+            res.send(decoded);
+        }
+    });
+});
+
 // --- login ---
 router.post('/mobile/login', (req, res) => {
     const { username, password } = req.body;
