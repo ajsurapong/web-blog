@@ -51,8 +51,8 @@ router.get('/blog/:year', checkUser, (req, res) => {
 // --- delete selected blog of a user ---
 router.delete('/blog/:id', checkUser, (req, res) => {
     const blogID = req.params.id;
-    const sql = 'DELETE FROM blog WHERE blogID = ?';
-    con.query(sql, [blogID], (err, result) => {
+    const sql = 'DELETE FROM blog WHERE blogID = ? AND userID = ?';
+    con.query(sql, [blogID, req.decoded.userID], (err, result) => {
         if(err) {
             console.log(err);
             return res.status(500).send('Database error');
@@ -89,8 +89,8 @@ router.put('/blog/edit', checkUser, (req, res) => {
     const detail = req.body.detail;
     const blogID = req.body.blogID;
     
-    const sql = 'UPDATE blog SET title = ?, detail = ? WHERE blogID = ?';
-    con.query(sql, [title, detail, blogID], (err, result) => {
+    const sql = 'UPDATE blog SET title = ?, detail = ? WHERE blogID = ? AND userID = ?';
+    con.query(sql, [title, detail, blogID, req.decoded.userID], (err, result) => {
         if(err) {
             console.log(err);
             return res.status(500).send('Database error');
